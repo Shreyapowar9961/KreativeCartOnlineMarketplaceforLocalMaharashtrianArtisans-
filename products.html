@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Google Translate script -->
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,mr',  // 'mr' is Marathi, you can add more language codes here
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <title>Product Page</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <link rel="stylesheet" href="style.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      
+        <style>
+          .buy-btn,
+          .cart-btn {
+            padding: 8px 12px;
+            border: none;
+            color: rgba(0, 0, 0, 0.753);
+            cursor: pointer;
+            margin-top: 5px;
+            border-radius: 5px;
+          }
+      
+          .buy-btn {
+            background-color: #28a745;
+          }
+      
+          .cart-btn {
+            background-color: #ffc107;
+            color: rgb(0, 0, 0);
+          }
+           
+          .col-4 img {
+  width: 100%;
+  height: 250px;      /* You can set it to 220px, 300px etc. as you like */
+  object-fit: cover;  /* Isse image crop hoti hai nicely, stretch nahi hoti */
+}
+
+
+
+        </style>
+        
+
+</head>
+<body>
+  <h2>Products</h2>
+  <div class="container">
+    <div class="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="images/logo.png" width="125px"></a>
+        </div>
+        <nav>
+         <ul id="MenuItems">
+             <li><a href="index.html">Home</a></li>
+             <li><a href="products.html">Products</a></li>
+             <li><a href="aboutus.html">About & Contact</a></li>
+             <li><a href="cdetailsview.html"><img src="images/accountimage.png" width="60px"></a></li>
+         </ul>
+        </nav>
+        <a href="adcart.html">
+          <img src="images/nn.png" width="60px" height="50px">
+          <span>Cart</span>
+      </a>
+      
+        <img src="images/menu.png" onclick="menutoggle()" class="menu-icon">
+    </div>
+    
+ </div>
+<!----------------- title -------------->
+<div class="small-container">
+<div class="row row-2">
+ <h2>All Products</h2>
+ <select>
+     <option>Default Shorting</option>
+     <option>Sort by price</option>
+     <option>Sort by popularity</option>
+     <option>Sort by rating</option>
+     <option>Sort by sale</option>
+ </select>
+</div>
+
+     <div class="row">
+         <div class="col-4">
+             <a href="product-details.html"><img src="images/kolhauri.jpeg"></a>
+             <h4><a href="product-details.html">Women Kolhapuri Chappal</a></h4>
+             <div class="rating">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star-o"></i>
+            </div>
+            
+              <p><strong>Name:</strong>Women Kolhapuri Chappal</p>
+              <p><strong>Price:</strong> ₹750</p>
+              <button onclick="addToCart({name: 'Women Kolhapuri Chappal', price: 750})" class="cart-btn">Add to Cart</button>
+            
+            <a href="checkout.html?name=Women%20Kolhapuri%20Chappal&price=850&img=images/kolhauri.jpeg">
+              <button class="buy-btn">Buy Now</button>
+            </a>
+          </div>
+            <div class="col-4">
+              <a href="product-details2.html"><img src="images/redclaypottery.jpeg"></a>
+              <h4><a href="product-details2.html">Designed Red Pot</a></h4>
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-o"></i>
+              </div>
+              <div class="product" data-name="Designed Red Pot" data-price="550">
+                <p><strong>Name:</strong> Designed Red Pot</p>
+                <p><strong>Price:</strong> ₹550</p>
+                <button onclick="addToCart({name: 'Designed Red Pot', price: 550})" class="cart-btn">Add to Cart</button>
+              
+              <a href="checkout.html?name=Designed%20Red%20Pot&price=550&img=images/redclaypotterys.jpeg">
+                <button class="buy-btn">Buy Now</button>
+              </a></div></div>
+            
+            <div class="col-4">
+              <a href="product-details3.html"><img src="images/W4.jpg"></a>
+              <h4><a href="product-details3.html">Wooden Horse</a></h4>
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-o"></i>
+              </div>
+              <div class="product" data-name="Wooden Horse" data-price="450">
+                <p><strong>Name:</strong> Wooden Horse</p>
+                <p><strong>Price:</strong> ₹450</p>
+                <button onclick="addToCart({name: 'Wooden Horse', price: 450})" class="cart-btn">Add to Cart</button>
+              
+              <a href="checkout.html?name=Wooden%20Horse&price=450&img=images/W4.jpg">
+                <button class="buy-btn">Buy Now</button>
+              </a>
+            </div>
+            </div>
+             
+            <div class="col-4">
+              <a href="product-details4.html"><img src="images/ChandraPaithani.jpg"></a>
+              <h4><a href="product-details4.html">Puneri Chandrakor Paithani</a></h4>
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-o"></i>
+              </div>
+              <div class="product" data-name="Puneri Chandrakor Paithani" data-price="4355">
+                <p><strong>Name:</strong> Puneri Chandrakor Paithani</p>
+                <p><strong>Price:</strong> ₹4355</p>
+                <button onclick="addToCart({name: 'Puneri Chandrakor Paithani', price: 4355})" class="cart-btn">Add to Cart</button>
+              </div>
+              <a href="checkout.html?name=Puneri%20Chandrakor%20Paithani&price=&img=images/ChandraPaithani.jpg">
+                <button class="buy-btn">Buy Now</button>
+              </a>
+            </div>
+            
+      
+            <div class="col-4">
+              <a href="product-details5.html"><img src="images/damaru.jpg"></a>
+              <h4><a href="product-details5.html">Wooden Damaru</a></h4>
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-o"></i>
+              </div>
+              <div class="product" data-name="Wooden Damaru" data-price="295">
+                <p><strong>Name:</strong> Wooden Damaru</p>
+                <p><strong>Price:</strong> ₹295</p>
+                <button onclick="addToCart({name: 'Wooden Damaru', price: 295})" class="cart-btn">Add to Cart</button>
+              </div>
+              <a href="checkout.html?name=Wooden%20Damru&price=295&img=images/damaru.jpg">
+                <button class="buy-btn">Buy Now</button>
+              </a>
+            </div>
+            
+            <div class="col-4">
+              <a href="product-details6.html"><img src="images/claypeice.jpg"></a>
+              <h4><a href="product-details6.html">Clay Showpiece</a></h4>
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-o"></i>
+              </div>
+              <div class="product" data-name="Clay Showpiece" data-price="55">
+                <p><strong>Name:</strong> Clay Showpiece</p>
+                <p><strong>Price:</strong> ₹55</p>
+                <button onclick="addToCart({name: 'Clay Showpiece', price: 55})" class="cart-btn">Add to Cart</button>
+              </div>
+              <a href="checkout.html?name=Clay%20Showpiece&price=655&img=images/claypeice.jpg">
+                <button class="buy-btn">Buy Now</button>
+              </a>
+            </div>
+            
+            <div class="col-4">
+              <a href="product-details7.html"><img src="images/wooden boys.jpeg"></a>
+              <h4><a href="product-details7.html">Wooden Truck</a></h4>
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-o"></i>
+              </div>
+              <div class="product" data-name="Wooden Truck" data-price="30">
+                <p><strong>Name:</strong> Wooden Truck</p>
+                <p><strong>Price:</strong> ₹30</p>
+                <button onclick="addToCart({name: 'Wooden Truck', price: 30})" class="cart-btn">Add to Cart</button>
+              </div>
+              <a href="checkout.html?name=Wooden%20Truck&price=300&img=images/wooden boys.jpeg">
+                <button class="buy-btn">Buy Now</button>
+              </a>
+            </div>
+            
+            <div class="col-4">
+              <a href="product-details8.html"><img src="images/mandalaevil.jpg"></a>
+              <h4><a href="product-details8.html">Mandala Art on Evil Wall hanging</a></h4>
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-o"></i>
+              </div>
+              <div class="product" data-name="Mandala Art on Evil Wall hanging" data-price="120">
+                <p><strong>Name:</strong> Mandala Art on Evil Wall hanging</p>
+                <p><strong>Price:</strong> ₹120</p>
+                <button onclick="addToCart({name: 'Mandala Art on Evil Wall hanging', price: 120})" class="cart-btn">Add to Cart</button>
+              </div>
+              <a href="checkout.html?name=Mandala%20Art%20on%20Evil%20Wall%20Hanging&price=120&img=images/mandalaevil.jpg">
+                <button class="buy-btn">Buy Now</button>
+              </a>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <img src="images/ChappalCat2.jpg" alt="Women Kolhapuri Chappal">
+                <h4>Women Kolhapuri Chappal</h4>
+                <div class="rating">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-o"></i>
+                </div>
+                <p>Rs.135.00</p>
+                <div class="product" data-name="Women Kolhapuri Chappal" data-price="135">
+                  <p><strong>Name:</strong> Women Kolhapuri Chappal</p>
+                  <p><strong>Price:</strong> ₹135</p>
+                  <button onclick="addToCart({name: 'Women Kolhapuri Chappal', price: 135})" class="cart-btn">Add to Cart</button>
+                </div>
+                <a href="checkout.html?name=Women%20Kolhapuri%20Chappal&price=1135&img=images/ChappalCat2.jpg">
+                  <button class="buy-btn">Buy Now</button>
+                </a>
+              </div>
+            
+              <div class="col-4">
+                <a href="product-details.html"><img src="images/H6.jpg" alt="Warli Handmade Paint"></a>
+                <h4><a href="product-details.html">Warli Handmade Paint</a></h4>
+                <div class="product" data-name="Warli Handmade Paint" data-price="50">
+                  <p><strong>Name:</strong> Warli Handmade Paint</p>
+                  <p><strong>Price:</strong> ₹50.00</p>
+                  <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-o"></i>
+                  </div>
+                  <button onclick="addToCart({name: 'Warli Handmade Paint', price: 50})"class="cart-btn">Add to Cart</button>
+                </div>
+                <a href="checkout.html?name=Warli%20Handmade%20Paint&price=450&img=images/H6.jpg">
+                  <button class="buy-btn">Buy Now</button>
+                </a>
+              </div>
+            
+              <div class="col-4">
+                <a href="product-details.html"><img src="images/P6.jpg" alt="Red Pot Coffee Mug"></a>
+                <h4><a href="product-details.html">Red Pot Coffee Mug</a></h4>
+                <div class="product" data-name="Red Pot Coffee Mug" data-price="55">
+                  <p><strong>Name:</strong> Red Pot Coffee Mug</p>
+                  <p><strong>Price:</strong> ₹55.00</p>
+                  <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-o"></i>
+                  </div>
+                  <button onclick="addToCart({name: 'Red Pot Coffee Mug', price: 55})"class="cart-btn">Add to Cart</button>
+                </div>
+                <a href="checkout.html?name=Red%20Pot%20Coffee%20Mug&price=55&img=images/P6.jpg">
+                  <button class="buy-btn">Buy Now</button>
+                </a>
+              </div>
+            
+              <div class="col-4">
+                <a href="product-details.html"><img src="images/H10.jpg" alt="Mandala Art Dream Catcher Wall Hanger"></a>
+                <h4><a href="product-details.html">Mandala Art Dream Catcher Wall Hanger</a></h4>
+                <div class="product" data-name="Mandala Art Dream Catcher Wall Hanger" data-price="75">
+                  <p><strong>Name:</strong> Mandala Art Dream Catcher Wall Hanger</p>
+                  <p><strong>Price:</strong> ₹75.00</p>
+                  <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-o"></i>
+                  </div>
+                  <button onclick="addToCart({name: 'Mandala Art Dream Catcher Wall Hanger', price: 75})"class="cart-btn">Add to Cart</button>
+                </div>
+                <a href="checkout.html?name=Mandala%20Art%20Dream%20Catcher%20Wall%20Hanger&price=375&img=images/H10.jpg">
+                  <button class="buy-btn">Buy Now</button>
+                </a>
+              </div>
+            </div>
+            
+     <div class="page-btn">
+      <a href="products.html"><span>1</span></a>
+      <a href="products2.html"><span>2</span></a>
+      <a href="products3.html"><span>3</span></a>
+      <a href="page5.html"><span>&#8594;</span></a> <!-- Right Arrow for Next Page -->
+  </div>
+  
+</div>
+
+
+ 
+
+  <script>
+    // ✅ Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJPD2ENAV0quu83S3A2F9KkDtpnmF46XA",
+  authDomain: "customer-login-2593c.firebaseapp.com",
+  projectId: "customer-login-2593c",
+  storageBucket: "customer-login-2593c.firebasestorage.app",
+  messagingSenderId: "516330296406",
+  appId: "1:516330296406:web:e9e8bcf45ad471a6c697f7"
+    };
+
+    // ✅ Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // ✅ Function to add product to Firestore
+    
+    // 🔄 Step 3: Example product data (this could also come from a DB or API)
+    const products = [
+      { id: 1, name: "Women Kolhapuri Chappal", price: 750 },
+      { id: 2, name: "Designed Red Pot", price: 400 },
+      { id: 3, name: "Wooden Horse", price: 800 },
+      { id: 4, name: "Clay Pot Set", price: 1200 },
+      
+    ];
+
+    // 📦 Step 4: Display products
+    const productList = document.getElementById("product-list");
+    products.forEach(product => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <a href="product-details.html"><img src="images/kolhauri.jpeg"></a>
+        <h4><a href="product-details.html">${product.name}</a></h4>
+        <p>Price: ₹${product.price}</p>
+        <button onclick='addToCart(${JSON.stringify(product)})' class="cart-btn">Add to Cart</button>
+      `;
+      productList.appendChild(div);
+    });
+
+    // 🛒 Step 5: Add to Firestore on button click
+    function addToCart(product) {
+  if (product) {
+    db.collection("cart").add({
+      name: product.name,
+      price: product.price,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+      alert(`${product.name} added to cart!`);
+    })
+    .catch(error => {
+      console.error("Error adding to cart: ", error);
+    });
+  } else {
+    console.error('Product is undefined or null');
+  }
+}
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Translate script -->
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,mr',  // 'mr' is Marathi, you can add more language codes here
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <meta charset="UTF-8">
+  <title>Your Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff3e0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #ff6f00;
+    }
+    .cart-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+      flex-wrap: wrap;
+    }
+    .cart-item-info {
+      flex: 1 1 60%;
+    }
+    .cart-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .remove-btn, .item-checkout-btn {
+      background-color: #ff5252;
+      border: none;
+      padding: 8px 12px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .item-checkout-btn {
+      background-color: #43a047;
+    }
+    #checkout-btn, #back-to-products {
+      display: block;
+      margin: 20px auto;
+      padding: 15px 30px;
+      background-color: #ff6f00;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #back-to-products {
+      background-color: #f69d29;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Shopping Cart</h1>
+  <button id="back-to-products">Back to Products</button>
+  <div class="cart-container" id="cart-container">
+    <!-- Cart items will be injected here -->
+  </div>
+  <button id="checkout-btn">Proceed to Checkout (All)</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJPD2ENAV0quu83S3A2F9KkDtpnmF46XA",
+      authDomain: "customer-login-2593c.firebaseapp.com",
+      projectId: "customer-login-2593c",
+      storageBucket: "customer-login-2593c.firebasestorage.app",
+      messagingSenderId: "516330296406",
+      appId: "1:516330296406:web:e9e8bcf45ad471a6c697f7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const cartContainer = document.getElementById('cart-container');
+
+    function renderCartItem(docSnap) {
+      const data = docSnap.data();
+      const docId = docSnap.id;
+
+      const item = document.createElement('div');
+      item.className = 'cart-item';
+      item.innerHTML = `
+        <div class="cart-item-info">
+          <h3>${data.name}</h3>
+          <p>Price: ₹${data.price}</p>
+        </div>
+        <div class="cart-buttons">
+          <button class="remove-btn">Remove</button>
+          <button class="item-checkout-btn">Proceed to Checkout</button>
+        </div>
+      `;
+      cartContainer.appendChild(item);
+
+      // Remove item permanently
+      item.querySelector('.remove-btn').addEventListener('click', async () => {
+        try {
+          await deleteDoc(doc(db, "cart", docId));
+          item.remove();
+          alert("Item permanently removed.");
+        } catch (error) {
+          console.error("Error removing item: ", error);
+          alert("Failed to remove item.");
+        }
+      });
+
+      // Item-level checkout
+      item.querySelector('.item-checkout-btn').addEventListener('click', () => {
+        alert(`Proceeding to checkout for: ${data.name}`);
+        // Optional: redirect to single checkout page with item details
+        // window.location.href = `checkout.html?item=${docId}`;
+      });
+    }
+
+    async function fetchCartItems() {
+      const querySnapshot = await getDocs(collection(db, "cart"));
+      if (querySnapshot.empty) {
+        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+      } else {
+        querySnapshot.forEach((docSnap) => {
+          renderCartItem(docSnap);
+        });
+      }
+    }
+
+    fetchCartItems();
+
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      alert("Proceeding to checkout for all items...");
+      // Optional: redirect to multi-item checkout
+      // window.location.href = "checkout.html";
+    });
+
+    document.getElementById('back-to-products').addEventListener('click', () => {
+      window.location.href = "products.html"; // Update path if different
+    });
+  </script>
+</body>
+</html>

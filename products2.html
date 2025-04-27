@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2 - All Products</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .buy-btn, .wishlist-btn {
+            padding: 8px 12px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+        .buy-btn {
+            background-color: #28a745;
+        }
+        .wishlist-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+    </style>
+     
+     <style>
+.col-4 {
+    height: 500px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.col-4 img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+</style>
+
+
+     </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png" width="125px"></a>
+            </div>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="aboutus.html">About & Contact</a></li>
+                    <li><a href="wishlist.html" title="Wishlist"><i class="fa fa-heart-o"></i></a></li>
+                </ul>
+            </nav>
+            <a href="cart.html">
+                <img src="images/cart.png" width="30px" height="30px"><span>Cart</span>
+            </a>
+            <img src="images/menu.png" onclick="menutoggle()" class="menu-icon">
+        </div>
+    </div>
+
+    <div class="small-container">
+        <div class="row row-2">
+            <h2>All Products</h2>
+            <select>
+                <option>Default Shorting</option>
+                <option>Short by price</option>
+                <option>Short by popularity</option>
+                <option>Short by rating</option>
+                <option>Short by sale</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <!-- You can replace these with other products -->
+            <div class="row">
+                <div class="col-4">
+                    <a href="product-details.html"><img src="images/p21.jpeg"></a>
+                    <h4><a href="product-details.html">Miniature musical instruments</a></h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <p>Rs. 1750.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                <div class="col-4">
+                    <img src="images/p22.jpeg">
+                    <h4>Popsicle Wall Hanging</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                    </div>
+                    <p>Rs.575.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                <div class="col-4">
+                    <img src="images/p23.jpeg">
+                    <h4>Mittify Earthen Clay Pot 11L</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                    </div>
+                    <p>Rs.350.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                 <div class="col-4">
+                    <img src="images/p24.jpeg">
+                    <h4>Handmade Indian Leather Men's Shoes</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <p>Rs.1000.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+            </div>
+             
+              <div class="row">
+                <div class="col-4">
+                    <img src="images/p25.jpeg">
+                    <h4>Tea cups</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <p>Rs.150.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                <div class="col-4">
+                    <img src="images/p26.jpeg">
+                    <h4>New Paithani Purse</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                    </div>
+                    <p>Rs.755.00</p>
+                     <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                <div class="col-4">
+                    <img src="images/p27.jpeg">
+                    <h4>Key Holder</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                    </div>
+                    <p>Rs.230.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                 <div class="col-4">
+                    <img src="images/p28.jpeg">
+                    <h4>Wooden Camel dryfuits bowl</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <p>Rs.260.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+            </div>
+            
+            <div class="row">
+                <div class="col-4">
+                    <img src="images/p29.jpeg">
+                    <h4>Tan Embellished Kolhapuris</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <p>Rs.1350.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                <div class="col-4">
+                    <img src="images/p210.jpeg">
+                    <h4>Handpainted Wooden Keychains</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                    </div>
+                    <p>Rs.70.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                <div class="col-4">
+                    <img src="images/p211.jpeg">
+                    <h4>Paithani Border Combo</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                    </div>
+                    <p>Rs.1170.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+                 <div class="col-4">
+                    <img src="images/p212.jpeg">
+                    <h4>Swadeshi Blessings Unglazed Clay Pot For Serving with Lid Combo 2.5 & 3.5L</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <p>Rs.1800.00</p>
+                    <button class="buy-btn">Buy Now</button>
+                    <button class="wishlist-btn">Add to Wishlist</button>
+                </div> 
+            </div>
+
+        <div class="page-btn">
+            <a href="products.html"><span>1</span></a>
+            <a href="products2.html"><span>2</span></a>
+            <a href="products3.html"><span>3</span></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer Dashboard</title>
+  <!-- Google Translate script -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,mr',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e8f5e9;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Menu Bar Styling */
+    nav {
+      background-color: #f1bd0f;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #MenuItems {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+      gap: 25px;
+    }
+
+    #MenuItems li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    #MenuItems li a:hover {
+      color: #ffcc80;
+    }
+
+    #google_translate_element {
+      margin-left: auto;
+      color: white;
+    }
+
+    .card {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      color: #388e3c;
+      text-align: center;
+    }
+
+    .info {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .buttons button {
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .logout {
+      background-color: #d32f2f;
+      color: white;
+    }
+
+    .logout:hover {
+      background-color: #b71c1c;
+    }
+
+    .wishlist {
+      background-color: #f06292;
+      color: white;
+    }
+
+    .wishlist:hover {
+      background-color: #ec8d40ea;
+    }
+
+    .orders {
+      background-color: #f5b642;
+      color: white;
+    }
+
+    .orders:hover {
+      background-color: #1e88e5;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation Menu -->
+<nav>
+  <ul id="MenuItems">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+  </ul>
+  <div id="google_translate_element"></div>
+</nav>
+
+<!-- Customer Info Card -->
+<div class="card">
+  <h2>Welcome, <span id="userName">User</span></h2>
+  <div class="info"><span class="label">Email:</span> <span id="userEmail"></span></div>
+  <div class="info"><span class="label">Gender:</span> <span id="userGender"></span></div>
+  <div class="info"><span class="label">Address:</span> <span id="userAddress"></span></div>
+  <div class="info"><span class="label">Phone:</span> <span id="userPhone"></span></div>
+
+  <div class="buttons">
+    <button class="orders" onclick="location.href='checkout.html'">My Orders</button>
+    <button class="wishlist" onclick="location.href='adcart.html'">CART</button>
+    <button class="logout" id="logoutBtn">Logout</button>
+  </div>
+</div>
+
+<!-- Firebase SDKs and Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJPD2ENAV0quu83S3A2F9KkDtpnmF46XA",
+    authDomain: "customer-login-2593c.firebaseapp.com",
+    projectId: "customer-login-2593c",
+    storageBucket: "customer-login-2593c.firebasestorage.app",
+    messagingSenderId: "516330296406",
+    appId: "1:516330296406:web:e9e8bcf45ad471a6c697f7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const docRef = doc(db, "customers", uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('userName').textContent = data.name || "No Name";
+        document.getElementById('userEmail').textContent = data.email || user.email;
+        document.getElementById('userGender').textContent = data.gender || "N/A";
+        document.getElementById('userAddress').textContent = data.address || "N/A";
+        document.getElementById('userPhone').textContent = data.phone || "N/A";
+      } else {
+        alert("User details not found.");
+      }
+    } else {
+      alert("Not logged in. Redirecting...");
+      window.location.href = "login.html";
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    signOut(auth)
+      .then(() => {
+        window.location.href = "index.html";
+      })
+      .catch((error) => {
+        console.error("Logout Error:", error);
+        alert("Error during logout.");
+      });
+  });
+</script>
+
+</body>
+</html>

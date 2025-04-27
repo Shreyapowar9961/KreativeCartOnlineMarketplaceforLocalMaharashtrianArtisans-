@@ -1,0 +1,281 @@
+<!-- upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Translate script -->
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,mr',  // 'mr' is Marathi, you can add more language codes here
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+  }
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Product</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      color: #ff6600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 500px;
+      width: 100%;
+      margin-bottom: 40px;
+    }
+
+    input, textarea {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #ff6600;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ff6600;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      margin: 10px 10px 0 0;
+    }
+
+    button:hover {
+      background-color: #e65500;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    #productList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1100px;
+      margin-top: 20px;
+    }
+
+    #productList > div {
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+
+    #productList > div:hover {
+      transform: translateY(-5px);
+    }
+
+    #productList img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    #productList h3 {
+      margin: 10px 0 5px;
+      font-size: 18px;
+      color: #222;
+    }
+
+    #productList p {
+      font-size: 14px;
+      margin: 5px 0;
+      color: #555;
+    }
+
+    #productList button {
+      background-color: #cc0000;
+    }
+
+    #productList button:hover {
+      background-color: #a30000;
+    }
+  </style>
+</head>
+<body>
+  <h2>Upload Your Product</h2>
+
+  <div class="form-container">
+    <input type="text" id="productName" placeholder="Product Name" required />
+    <textarea id="description" placeholder="Description" rows="3"></textarea>
+    <input type="number" id="price" placeholder="Price" required />
+    <input type="number" id="stock" placeholder="Available Stock" required />
+    <input type="file" id="productImage" accept="image/*" required />
+    <div class="button-group">
+      <button id="uploadBtn">Upload Product</button>
+      <button onclick="window.location.href='upload.html'">View Your Products</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <h2>Your Uploaded Products</h2>
+  <div id="productList"></div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDGiLPJ_4uGvHS9Ix7yQv9A-t47jQFAIY8",
+      authDomain: "artisan-login-57cbf.firebaseapp.com",
+      projectId: "artisan-login-57cbf",
+      storageBucket: "artisan-login-57cbf.appspot.com",
+      messagingSenderId: "487893760848",
+      appId: "1:487893760848:web:67b7c85ee0fd1752a80a55"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        alert("Please login first!");
+        window.location.href = 'login.html';
+        return;
+      }
+
+      loadProducts(user.uid);
+
+      document.getElementById("uploadBtn").addEventListener("click", () => uploadProduct(user.uid));
+    });
+
+    async function uploadProduct(artisanID) {
+      const name = document.getElementById("productName").value;
+      const desc = document.getElementById("description").value;
+      const price = parseFloat(document.getElementById("price").value);
+      const stock = parseInt(document.getElementById("stock").value);
+      const file = document.getElementById("productImage").files[0];
+
+      if (!name || !desc || !price || !stock || !file) {
+        alert("All fields are required!");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function(event) {
+        const base64 = event.target.result;
+
+        await db.collection("products").add({
+          name,
+          description: desc,
+          price,
+          stock,
+          imageData: base64,
+          artisanID,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        alert("Product uploaded!");
+        document.getElementById("productName").value = '';
+        document.getElementById("description").value = '';
+        document.getElementById("price").value = '';
+        document.getElementById("stock").value = '';
+        document.getElementById("productImage").value = '';
+
+        loadProducts(artisanID);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function loadProducts(artisanID) {
+      const container = document.getElementById("productList");
+      container.innerHTML = "";
+
+      try {
+        const snapshot = await db.collection("products")
+          .where("artisanID", "==", artisanID)
+          .orderBy("timestamp", "desc")
+          .get();
+
+        if (snapshot.empty) {
+          container.innerHTML = "<p>No products uploaded yet.</p>";
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const card = document.createElement("div");
+          card.innerHTML = `
+            <img src="${data.imageData}" alt="${data.name}">
+            <h3>${data.name}</h3>
+            <p>${data.description}</p>
+            <p><strong>Price:</strong> ₹${data.price}</p>
+            <p><strong>Stock:</strong> ${data.stock}</p>
+            <button onclick="removeProduct('${doc.id}')">Remove</button>
+          `;
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error loading products:", error);
+        container.innerHTML = "<p>Error loading products.</p>";
+      }
+    }
+
+    async function removeProduct(productID) {
+      const confirmRemove = confirm("Are you sure you want to remove this product?");
+      if (!confirmRemove) return;
+
+      try {
+        await db.collection("products").doc(productID).delete();
+        alert("Product removed successfully!");
+        loadProducts(auth.currentUser.uid);
+      } catch (error) {
+        console.error("Error removing product:", error);
+        alert("There was an error removing the product.");
+      }
+    }
+
+    function logout() {
+      auth.signOut().then(() => {
+        alert("Logged out!");
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+</body>
+</html>

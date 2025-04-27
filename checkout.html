@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <!-- Google Translate script -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,mr',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - KreativeCart</title>
+    <link rel="stylesheet" href="checkout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png" width="125px"></a>
+            </div>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="aboutus.html">About & Contact</a></li>
+                    <li><a href="account.html">Account</a></li>
+                </ul>
+            </nav>
+            <a href="cart.html"><img src="images/cart.png" width="30px" height="30px" class="cart-icon"></a>
+        </div>
+    </div>
+
+    <!-- Checkout Section -->
+    <div class="small-container checkout-page">
+        <h2>Checkout</h2>
+        <div class="row">
+            <div class="col-2">
+                <h3>Shipping Address</h3>
+                <form>
+                    <label for="full-name">Full Name *</label>
+                    <input type="text" id="full-name" aria-label="Full Name" placeholder="Enter your full name" required>
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <label for="address">Address Line 1 *</label>
+                    <input type="text" id="address" placeholder="Street address" required>
+                    <label for="address2">Address Line 2</label>
+                    <input type="text" id="address2" placeholder="Apartment, suite, etc. (optional)">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" placeholder="Enter your city" required>
+                    <label for="state">State *</label>
+                    <input type="text" id="state" placeholder="Enter your state" required>
+                    <label for="zip">ZIP Code *</label>
+                    <input type="text" id="pincode" placeholder="Enter your ZIP code" required>
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" placeholder="Enter your phone number" required>
+                </form>
+
+                <h3>Payment Method</h3>
+                <form>
+                    <label>
+                        <input type="radio" name="payment" value="card" checked> Credit/Debit Card
+                    </label>
+                    <div class="payment-details">
+                        <label for="card-number">Card Number *</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+                        <label for="card-expiry">Expiry Date *</label>
+                        <input type="text" id="card-expiry" placeholder="MM/YY" required>
+                        <label for="card-cvc">CVC *</label>
+                        <input type="text" id="card-cvc" placeholder="123" required>
+                    </div>
+                    <label>
+                        <input type="radio" name="payment" value="upi"> UPI ID
+                        <input type="text" id="card-number" placeholder="example@upi" required>
+                        <label>
+                            <input type="radio" name="payment" value="upi"> QR-code
+                        </label>
+                        
+                        
+                    </label>
+                    <img src="images/my-qr-code.jpg" alt="QR Code" width="150px">
+                    <label>
+                        <input type="radio" name="payment" value="cod"> Cash on Delivery
+                    </label>
+                </form>
+            </div>
+            <div class="col-2">
+                <h3>Your Order</h3>
+                <div class="order-summary">
+                    <table id="order-items">
+                        <div class="checkout-product">
+                            <h2 id="product-name"></h2>
+                            <p id="product-price"></p>
+                        </div>
+                    </table>
+                    
+                    <table class="order-totals">
+                        <tr>
+                            <td>Subtotal</td>
+                            <td id="subtotal">Rs.0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Tax</td>
+                            <td id="tax">Rs.0.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td id="total"><strong>Rs.0.00</strong></td>
+                        </tr>
+                    </table>
+                    <button id="place-order-btn" class="btn" type="button">Place Order</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Firebase SDK (ensure you have the correct script source) -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        
+        // Firebase config
+        const firebaseConfig = {
+          apiKey: "AIzaSyCJPD2ENAV0quu83S3A2F9KkDtpnmF46XA",
+          authDomain: "customer-login-2593c.firebaseapp.com",
+          projectId: "customer-login-2593c",
+          storageBucket: "customer-login-2593c.firebasestorage.app",
+          messagingSenderId: "516330296406",
+          appId: "1:516330296406:web:e9e8bcf45ad471a6c697f7"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        
+        // Initialize Firestore
+        const db = getFirestore(app);
+        
+        // Save order to Firestore using modular Firestore API
+        function saveOrderToFirestore(order) {
+          const ordersCollection = collection(db, "orders");
+          addDoc(ordersCollection, order)
+            .then(docRef => 
+              console.log("Order added to Firestore with ID: ", docRef.id))
+            
+            .catch(error => 
+              console.error("Error adding order: ", error));
+            
+        }
+      
+        // Helper to get query parameters
+        function getQueryParam(param) {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get(param);
+        }
+      
+        // Extract order details from query parameters
+        const productName = getQueryParam("name");
+        const productPrice = parseFloat(getQueryParam("price")) || 0;
+        const productImg = getQueryParam("img");
+      
+        if (productName && productPrice) {
+          const table = document.getElementById("order-items");
+          const row = table.insertRow(-1);
+          const cell1 = row.insertCell(0);
+          const cell2 = row.insertCell(1);
+      
+          const imageHTML = productImg ? `<img src="${productImg}" class="product-img">` : "";
+          cell1.innerHTML = `${imageHTML}${productName}`;
+          cell2.innerText = `Rs.${productPrice.toFixed(2)}`;
+      
+          const tax = productPrice * 0.07;
+          const total = productPrice + tax;
+      
+          document.getElementById("subtotal").innerText = `Rs.${productPrice.toFixed(2)}`;
+          document.getElementById("tax").innerText = `Rs.${tax.toFixed(2)}`;
+          document.getElementById("total").innerHTML = `<strong>Rs.${total.toFixed(2)}</strong>`;
+        }
+        // Payment method toggle
+    const cardFields = document.querySelector(".payment-details");
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+      radio.addEventListener("change", () => {
+        cardFields.style.display = radio.value === "card" && radio.checked ? "block" : "none";
+      });
+    });
+
+    // Set default visibility
+    if (document.querySelector('input[name="payment"]:checked').value !== "card") {
+      cardFields.style.display = "none";
+    }
+      
+        // Order placement logic
+        document.getElementById("place-order-btn").addEventListener("click", (e) => {
+
+          e.preventDefault();
+      
+          const name = document.getElementById("full-name").value;
+          const email = document.getElementById("email").value;
+          const phone = document.getElementById("phone").value;
+          const address = document.getElementById("address").value;
+          const city = document.getElementById("city").value;
+          const pincode = document.getElementById("pincode").value;
+      
+          
+          const paymentMethod = document.querySelector('input[name="payment"]:checked');
+
+          if (!name || !email || !phone || !address || !city || !pincode || !paymentMethod) {
+            alert("Please fill out all fields and select a payment method.");
+            return;
+          }
+      
+          const selectedMethod = paymentMethod.value;
+          const btn = document.getElementById("place-order-btn");
+          btn.disabled = true;
+          btn.innerText = "Processing...";
+      
+          // Simulate order processing
+          setTimeout(() => {
+            // Show success alert
+            alert("🎉 Thank you for your order!\nYour payment method: " + selectedMethod + "\nYou will now be redirected to the homepage.");
+      
+            // Save order to Firestore
+            const order = {
+              name, email, phone, address, city, pincode, payment: selectedMethod,
+              product: productName,
+              price: productPrice,
+              date: new Date().toLocaleString()
+            };
+      
+            saveOrderToFirestore(order);
+      
+            // Save to localStorage (optional)
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            orders.push(order);
+            localStorage.setItem("orders", JSON.stringify(orders));
+      
+            // Reset form
+            document.querySelectorAll("form").forEach(f => f.reset());
+      
+            // Redirect to homepage
+            window.location.href = "index.html"; // Homepage filename
+          }, 500);
+        });
+      </script>
+      
+      
+      
+    
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col1">
+                    <h3>Download Our App</h3>
+                    <p>Download App for Android and ios mobile phone.</p>
+                    <div class="app-logo">
+                        <img src="images/play-store.png">
+                        <img src="images/app-store.png">
+                    </div>
+                </div>
+                <div class="footer-col2">
+                    <img src="images/logowhite.png">
+                    <p>Our purpose is to sustainably bring the beauty and value of handcrafted art to everyone through an accessible online marketplace for artisans.</p>
+                </div>
+                <div class="footer-col3">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li>Coupons</li>
+                        <li>Blog Post</li>
+                        <li>Return Policy</li>
+                        <li>Join Affiliate</li>
+                    </ul>
+                </div>
+                <div class="footer-col4">
+                    <h3>Follow Us</h3>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>Twitter</li>
+                        <li>Instagram</li>
+                        <li>YouTube</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="copyright"><a>Copyright 2025 - KreativeCart</a></p>
+        </div>
+    </div>
+
+    <!-- JS for Toggle Menu -->
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+        function menutoggle() {
+            if (MenuItems.style.maxHeight == "0px") {
+                MenuItems.style.maxHeight = "200px";
+            } else {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+    </script>
+</body>
+</html>

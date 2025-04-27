@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,mr',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <title>User Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff3e0;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Navigation Bar */
+    nav {
+      background-color: #ff9800;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    nav .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 30px;
+      color: #ff6f00;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      background-color: #ff9800;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #f57c00;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav Menu -->
+<nav>
+  <div class="logo">KreativeCraft</div>
+  <ul>
+    <li><a href="home.html">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <a href="adcart.html"><img src="images/nn.png" width="60px" height="50px"></a>    <li><a href="logout.html">Logout</a></li>
+    <li><a href="logout.html">Logout</a></li>
+  </ul>
+</nav>
+
+<h2>Your Details</h2>
+<form id="userDetailsForm">
+  <input type="text" id="name" placeholder="Full Name" required />
+  <select id="gender" required>
+    <option value="">Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+  </select>
+  <input type="text" id="address" placeholder="Address" required />
+  <input type="tel" id="phone" placeholder="Phone Number" required />
+  <button type="submit">Save Details</button>
+</form>
+
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJPD2ENAV0quu83S3A2F9KkDtpnmF46XA",
+    authDomain: "customer-login-2593c.firebaseapp.com",
+    projectId: "customer-login-2593c",
+    storageBucket: "customer-login-2593c.firebasestorage.app",
+    messagingSenderId: "516330296406",
+    appId: "1:516330296406:web:e9e8bcf45ad471a6c697f7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const form = document.getElementById('userDetailsForm');
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const userDocRef = doc(db, "customers", uid);
+
+      try {
+        const docSnap = await getDoc(userDocRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          document.getElementById('name').value = data.name || "";
+          document.getElementById('gender').value = data.gender || "";
+          document.getElementById('address').value = data.address || "";
+          document.getElementById('phone').value = data.phone || "";
+        }
+      } catch (err) {
+        console.error("Error fetching existing user data: ", err);
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const gender = document.getElementById('gender').value;
+        const address = document.getElementById('address').value;
+        const phone = document.getElementById('phone').value;
+
+        try {
+          await setDoc(userDocRef, {
+            name,
+            gender,
+            address,
+            phone,
+            email: user.email
+          });
+
+          alert("Details saved successfully!");
+          window.location.href = "cdetailsview.html";
+        } catch (error) {
+          console.error("Error saving details:", error);
+          alert("Error saving details.");
+        }
+      });
+
+    } else {
+      alert("You are not logged in. Redirecting to login...");
+      window.location.href = "cdetails.html";
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - KreativeCraft</title>
+    <style>
+        /* Styling the checkout container */
+        .checkout-container {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .checkout-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Styling the product details section */
+        .product-details {
+            margin-bottom: 30px;
+        }
+
+        .product-image {
+            width: 200px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            color: #FF4500;
+        }
+
+        /* Styling the form inputs */
+        .form-group {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        /* Styling the confirm purchase button */
+        .buy-btn {
+            padding: 10px 20px;
+            background-color: #FF6F00;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .buy-btn:hover {
+            background-color: #FF4500;
+        }
+
+        /* Styling the order confirmation section */
+        #order-confirmation {
+            display: none;
+            margin-top: 30px;
+        }
+
+        #order-confirmation h2 {
+            color: green;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h1>Checkout</h1>
+        
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <img id="checkout-product-image" src="" alt="Product Image" class="product-image">
+            <h2 id="checkout-product-name">Product Name</h2>
+            <p class="product-price" id="checkout-product-price">₹0</p>
+        </div>
+
+        <!-- Customer Information Form -->
+        <form id="checkout-form">
+            <div class="form-group">
+                <label for="customer-name">Name:</label>
+                <input type="text" id="customer-name" name="customer-name" required>
+            </div>
+            <div class="form-group">
+                <label for="customer-email">Email:</label>
+                <input type="email" id="customer-email" name="customer-email" required>
+            </div>
+            <div class="form-group">
+                <label for="shipping-address">Shipping Address:</label>
+                <textarea id="shipping-address" name="shipping-address" required></textarea>
+            </div>
+            <button type="submit" class="buy-btn">Confirm Purchase</button>
+        </form>
+        
+        <!-- Order Confirmation Section -->
+        <div id="order-confirmation" class="hidden">
+            <h2>Order Confirmed!</h2>
+            <p id="confirmation-message"></p>
+        </div>
+    </div>
+
+    <script>
+        // A function to load product details from localStorage
+        function loadCheckoutPage() {
+            // Get the product details from localStorage
+            const product = JSON.parse(localStorage.getItem('productDetails')) || {
+                name: 'Unknown Product',
+                price: 0,
+                image: 'default.jpg'
+            };
+
+            // Populate the product details in the page
+            document.getElementById('checkout-product-name').innerText = product.name;
+            document.getElementById('checkout-product-price').innerText = `₹${product.price}`;
+            document.getElementById('checkout-product-image').src = product.image;
+        }
+
+        // Handle form submission (For now, just logging the details)
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form from submitting normally
+            
+            // Get customer details from the form
+            const customerName = document.getElementById('customer-name').value;
+            const customerEmail = document.getElementById('customer-email').value;
+            const shippingAddress = document.getElementById('shipping-address').value;
+
+            // Get the product details (stored previously)
+            const product = JSON.parse(localStorage.getItem('productDetails'));
+
+            // Log the order details for now (This should be submitted to Firebase or a server)
+            console.log("Order Details:", {
+                customerName,
+                customerEmail,
+                shippingAddress,
+                product
+            });
+
+            // Show order confirmation
+            document.getElementById('confirmation-message').innerText = 
+                `Thank you for your order, ${customerName}! You will receive a confirmation email at ${customerEmail} for the product "${product.name}". We will ship it to ${shippingAddress}.`;
+
+            // Hide the checkout form and display the confirmation
+            document.getElementById('checkout-form').style.display = 'none';
+            document.getElementById('order-confirmation').style.display = 'block';
+
+            // Optionally, clear localStorage after order
+            localStorage.removeItem('productDetails');
+        });
+
+        // Load the page with product data when it loads
+        window.onload = loadCheckoutPage;
+
+        // The buyNow function stores the product details in localStorage
+        function buyNow(product) {
+            // Accessing the product details (name, price, image)
+            const { name, price, image } = product;
+            
+            // Logging the product info for demonstration
+            console.log("Product Added to Cart:", name, "Price:", price, "Image:", image);
+
+            // Store the product details in localStorage
+            localStorage.setItem('productDetails', JSON.stringify(product));
+
+            // Redirect to the embedded checkout page (same page)
+            window.location.href = window.location.href; // Reload the current page to display the checkout
+        }
+    </script>
+
+    <!-- Example usage of buyNow() function on a product page -->
+    <button class="buy-btn" onclick="buyNow({name: 'Women Kolhapuri Chappal', price: 750, image: 'kolhapuri_chappal.jpg'})">Buy Now</button>
+</body>
+</html>
